@@ -4,21 +4,48 @@
 @push('styles')
 <style>
 .hero-swiper { height: 520px; }
-.hero-slide { height: 520px; display: flex; align-items: center; }
-.hero-slide.slide-1 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-.hero-slide.slide-2 { background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%); }
-.hero-slide.slide-3 { background: linear-gradient(135deg, #c1121f 0%, #780000 100%); }
+.hero-slide { height: 520px; display: flex; align-items: center; position: relative; }
+
+/* Thay thế các lớp màu tĩnh bằng ảnh nền động thực tế kết hợp hiệu ứng phủ tối */
+.hero-slide.slide-1 { 
+    background: url('https://i.pinimg.com/736x/6b/71/d6/6b71d660b8fd2d0034a7d0d3a22beb67.jpg') center/cover no-repeat; 
+}
+.hero-slide.slide-2 { 
+    background: url('https://i.pinimg.com/736x/7a/c0/53/7ac0534c150a51201a761a99030b6f51.jpg') center/cover no-repeat; 
+}
+.hero-slide.slide-3 { 
+    background: url('https://i.pinimg.com/1200x/25/a6/6a/25a66a451a9a26fcbe9c3b7cff9308fd.jpg') center/cover no-repeat; 
+}
+
+/* Lớp phủ Gradient bảo vệ chữ khỏi lóa màu ảnh nền */
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    start: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+}
+
+/* Đảm bảo toàn bộ nội dung container nổi lên trên lớp phủ */
+.hero-slide .container {
+    position: relative;
+    z-index: 2;
+}
+
 .hero-badge { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 50px; font-size: 0.85rem; display: inline-block; margin-bottom: 16px; }
 .hero-title { font-size: 3rem; font-weight: 800; color: #fff; line-height: 1.2; }
-.hero-subtitle { color: rgba(255,255,255,0.75); font-size: 1.1rem; }
-.hero-img { max-height: 420px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4)); }
+.hero-subtitle { color: rgba(255,255,255,0.85); font-size: 1.1rem; }
+.hero-img { max-height: 380px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6)); object-fit: contain; }
 .section-title { font-size: 1.8rem; font-weight: 700; }
 .section-title span { color: var(--primary); }
 .brand-card { border-radius: 12px; border: 2px solid transparent; transition: all .2s; cursor: pointer; }
 .brand-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(230,57,70,0.15); }
 .brand-logo { width: 80px; height: 80px; object-fit: contain; }
 .feature-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 12px; }
-.swiper-button-next, .swiper-button-prev { color: var(--primary) !important; }
+.swiper-button-next, .swiper-button-prev { color: #fff !important; } /* Đổi màu nút điều hướng sang trắng để nổi bật trên nền ảnh */
 .thumb-swiper .swiper-slide { opacity: 0.5; cursor: pointer; }
 .thumb-swiper .swiper-slide-thumb-active { opacity: 1; }
 </style>
@@ -41,12 +68,13 @@
                             <a href="{{ route('shop.index') }}" class="btn btn-outline-light btn-lg px-4">Tất cả xe</a>
                         </div>
                     </div>
-                    <div class="col-md-6 text-center">
-                        <img src="https://placehold.co/500x320/1a1a2e/ffd166?text=Honda+Wave+Alpha" class="hero-img img-fluid" alt="Honda Wave">
+                    <div class="col-md-6 text-center d-none d-md-block">
+                        <img src="https://hondadoanhthu.com.vn/wp-content/uploads/2022/01/eOrVrOLAOD0Fvshzhu3G.jpg" class="hero-img img-fluid" alt="Honda Wave">
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="swiper-slide hero-slide slide-2">
             <div class="container">
                 <div class="row align-items-center">
@@ -58,12 +86,13 @@
                             <a href="{{ route('shop.index', ['brand'=>'yamaha']) }}" class="btn btn-light btn-lg px-4">Xem ngay <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
-                    <div class="col-md-6 text-center">
-                        <img src="https://placehold.co/500x320/2d1b69/a8edea?text=Yamaha+Exciter+155" class="hero-img img-fluid" alt="Yamaha Exciter">
+                    <div class="col-md-6 text-center d-none d-md-block">
+                        <img src="https://i.pinimg.com/736x/cd/c9/99/cdc9990e1dbddb79b4afc9d022919d94.jpg" class="hero-img img-fluid" alt="Yamaha Exciter">
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="swiper-slide hero-slide slide-3">
             <div class="container">
                 <div class="row align-items-center">
@@ -72,11 +101,11 @@
                         <h1 class="hero-title">Honda Vision 110<br><span style="color:#ffd166">Giảm đến 5 triệu</span></h1>
                         <p class="hero-subtitle mt-3 mb-4">Xe tay ga thời trang, tiết kiệm xăng vượt trội</p>
                         <div class="d-flex gap-3">
-                            <a href="{{ route('shop.index') }}" class="btn btn-warning btn-lg px-4 text-dark">Mua ngay</a>
+                            <a href="{{ route('shop.index') }}" class="btn btn-warning btn-lg px-4 text-dark fw-bold">Mua ngay</a>
                         </div>
                     </div>
-                    <div class="col-md-6 text-center">
-                        <img src="https://placehold.co/500x320/780000/ffd166?text=Honda+Vision+110" class="hero-img img-fluid" alt="Honda Vision">
+                    <div class="col-md-6 text-center d-none d-md-block">
+                        <img src="https://i.pinimg.com/736x/64/91/af/6491af7d5b0f8559c1ad0299b47dd3cf.jpg" class="hero-img img-fluid" alt="Honda Vision">
                     </div>
                 </div>
             </div>
@@ -150,7 +179,6 @@
                     @include('partials.product-card', ['product' => $product])
                 </div>
                 @empty
-                {{-- Fallback nếu chưa có xe nổi bật --}}
                 @foreach($latest->take(4) as $product)
                 <div class="swiper-slide">
                     @include('partials.product-card', ['product' => $product])
@@ -184,7 +212,7 @@
 </section>
 
 {{-- ===== BANNER GIỮA TRANG ===== --}}
-<section class="py-5" style="background: linear-gradient(135deg, #1a1a2e, #e63946);">
+<section class="py-5" style="background: linear-gradient(135deg, #1a1a2e, #e63946); border-radius: 16px; margin-bottom: 30px;">
     <div class="container text-center text-white">
         <h2 class="fw-bold mb-2">🔥 Ưu đãi đặc biệt tháng này</h2>
         <p class="lead mb-4 opacity-75">Mua xe trả góp 0% lãi suất — Tặng phụ kiện trị giá 2 triệu đồng</p>

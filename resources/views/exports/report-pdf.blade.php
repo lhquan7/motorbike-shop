@@ -35,8 +35,8 @@
   <div class="logo">🏍️ MotoShop</div>
   <h1>BÁO CÁO KINH DOANH</h1>
   <p>
-    Năm {{ $this->year }}
-    @if($this->month) — Tháng {{ $this->month }} @endif
+    Năm {{ $year }}
+    @if(isset($month) && $month) — Tháng {{ $month }} @endif
     &nbsp;|&nbsp; Xuất lúc: {{ now()->format('H:i d/m/Y') }}
   </p>
 </div>
@@ -72,7 +72,7 @@
     <tbody>
     @forelse($monthlyRevenue as $row)
     <tr>
-      <td><strong>Tháng {{ $row->month }}/{{ $this->year }}</strong></td>
+      <td><strong>Tháng {{ $row->month }}/{{ $year }}</strong></td>
       <td class="text-center"><span class="badge badge-success">{{ $row->orders }} đơn</span></td>
       <td class="text-right" style="color:#e63946;font-weight:bold;">{{ number_format($row->revenue) }}đ</td>
       <td class="text-right">{{ $row->orders ? number_format($row->revenue / $row->orders) : 0 }}đ</td>
@@ -80,7 +80,8 @@
     @empty
     <tr><td colspan="4" class="text-center" style="color:#888;padding:16px;">Chưa có dữ liệu</td></tr>
     @endforelse
-    @if($monthlyRevenue->count())
+    
+    @if(count($monthlyRevenue))
     <tr style="background:#fff3cd;">
       <td><strong>TỔNG CỘNG</strong></td>
       <td class="text-center"><strong>{{ $monthlyRevenue->sum('orders') }}</strong></td>

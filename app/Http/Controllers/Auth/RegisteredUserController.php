@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // ĐÃ FIX: Sửa chuyển hướng từ 'dashboard' thành 'home' để khớp với hệ thống route của bạn
+        return redirect(route('home', absolute: false));
     }
 }

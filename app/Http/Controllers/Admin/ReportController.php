@@ -7,10 +7,11 @@ use App\Models\{Order, Product, OrderItem};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
-// Thêm 3 dòng này
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\{OrdersExport, RevenueExport, ReportPdfExport};
+use App\Exports\{OrdersExport, RevenueExport};
+
+// ĐÃ FIX: Thêm thư viện xuất PDF chuẩn của Laravel thay cho class export cũ
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
@@ -151,12 +152,48 @@ class ReportController extends Controller
         );
     }
 
-    // Export PDF
+    // ĐÃ FIX: Viết lại hàm Export PDF lấy dữ liệu thực tế đẩy trực tiếp sang Blade
     public function exportPdf(Request $request)
     {
         $year  = $request->get('year', now()->year);
         $month = $request->get('month', null);
 
-        return (new ReportPdfExport($year, $month))->download();
+        // 1. Lấy dữ liệu Doanh thu theo tháng
+        $monthlyRevenue = Order::where('status', 'completed')
+            ->whereYear('created_at', $year)
+            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue, COUNT(*) as orders')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // 2. Lấy dữ liệu Top sản phẩm bán chạy (map khớp với biến ngoài view)
+        $topProducts = DB::table('order_items')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.status', 'completed')
+            ->whereYear('orders.created_at', $year)
+            ->when($month, fn($q) => $q->whereMonth('orders.created_at', $month))
+            ->select(
+                'order_items.product_name',
+                DB::raw('SUM(order_items.quantity) as qty'),
+                DB::raw('SUM(order_items.price * order_items.quantity) as revenue')
+            )
+            ->groupBy('order_items.product_name')
+            ->orderByDesc('qty')
+            ->take(10)
+            ->get();
+
+        // 3. Tính toán mảng Summary tổng quan
+        $summary = [
+            'revenue'   => Order::where('status', 'completed')->whereYear('created_at', $year)->when($month, fn($q) => $q->whereMonth('created_at', $month))->sum('total_amount'),
+            'orders'    => Order::whereYear('created_at', $year)->when($month, fn($q) => $q->whereMonth('created_at', $month))->count(),
+            'completed' => Order::where('status', 'completed')->whereYear('created_at', $year)->when($month, fn($q) => $q->whereMonth('created_at', $month))->count(),
+        ];
+
+        // 4. Khởi tạo DomPDF cấu hình hỗ trợ font chữ tiếng Việt không bị ô vuông
+        $pdf = Pdf::loadView('exports.report-pdf', compact('year', 'month', 'monthlyRevenue', 'topProducts', 'summary'))
+                  ->setPaper('a4', 'portrait');
+
+        $fileName = 'BaoCaoKinhDoanh_' . $year . ($month ? '_T' . $month : '') . '.pdf';
+        return $pdf->download($fileName);
     }
 }
