@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,7 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Tự động gọi ProductSeeder chứa 35 xe máy để nạp vào DB
+        // 1. Tự động tạo lại tài khoản khoản Admin chuẩn
+        User::updateOrCreate(
+            ['email' => 'admin@motorbike.com'], // Giữ đúng email bạn đang đăng nhập
+            [
+                'name' => 'Quản trị viên',
+                'password' => Hash::make('admin123'), // Mật khẩu thiết lập: admin123
+                'phone' => '0999999999',
+                'address' => 'Hà Nội',
+                'role' => 'admin', // Đảm bảo cột phân quyền trùng với cấu trúc đồ án của bạn
+            ]
+        );
+
+        // 2. Gọi ProductSeeder để nạp tiếp 35 xe máy có ảnh
         $this->call([
             ProductSeeder::class,
         ]);

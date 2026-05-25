@@ -12,25 +12,25 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        // Lấy danh sách các hãng xe dựa trên Slug
-        $honda   = Brand::where('slug', 'honda')->first();
-        $yamaha  = Brand::where('slug', 'yamaha')->first();
-        $sym     = Brand::where('slug', 'sym')->first();
-        $piaggio = Brand::where('slug', 'piaggio')->first();
-        $suzuki  = Brand::where('slug', 'suzuki')->first();
+        // Kiểm tra và tự động khởi tạo Hãng xe nếu database đang trống
+        $honda   = Brand::firstOrCreate(['slug' => 'honda'], ['name' => 'Honda']);
+        $yamaha  = Brand::firstOrCreate(['slug' => 'yamaha'], ['name' => 'Yamaha']);
+        $sym     = Brand::firstOrCreate(['slug' => 'sym'], ['name' => 'SYM']);
+        $piaggio = Brand::firstOrCreate(['slug' => 'piaggio'], ['name' => 'Piaggio']);
+        $suzuki  = Brand::firstOrCreate(['slug' => 'suzuki'], ['name' => 'Suzuki']);
 
-        // Lấy danh sách các danh mục xe (Loại xe)
-        $xeSo   = Category::where('slug', 'xe-so')->first();
-        $tayGa  = Category::where('slug', 'xe-tay-ga')->first();
-        $conTay = Category::where('slug', 'xe-con-tay')->first();
+        // Kiểm tra và tự động khởi tạo Danh mục xe nếu database đang trống
+        $xeSo   = Category::firstOrCreate(['slug' => 'xe-so'], ['name' => 'Xe số']);
+        $tayGa  = Category::firstOrCreate(['slug' => 'xe-tay-ga'], ['name' => 'Xe tay ga']);
+        $conTay = Category::firstOrCreate(['slug' => 'xe-con-tay'], ['name' => 'Xe côn tay']);
 
         // Mảng chứa dữ liệu 35 xe máy (Mỗi hãng 7 xe)
         $products = [
             // ==================== HONDA (7 Xe) ====================
             [
                 'name' => 'Honda Wave Alpha 110',
-                'brand_id' => $honda?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $xeSo->id,
                 'price' => 18900000,
                 'sale_price' => 18500000,
                 'stock' => 15,
@@ -42,8 +42,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda Vision 110 Cao Cấp',
-                'brand_id' => $honda?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $tayGa->id,
                 'price' => 33000000,
                 'sale_price' => 32500000,
                 'stock' => 20,
@@ -55,8 +55,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda Air Blade 125 Tiêu Chuẩn',
-                'brand_id' => $honda?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $tayGa->id,
                 'price' => 42000000,
                 'sale_price' => null,
                 'stock' => 12,
@@ -68,8 +68,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda SH Mode 125',
-                'brand_id' => $honda?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $tayGa->id,
                 'price' => 58000000,
                 'sale_price' => 57000000,
                 'stock' => 8,
@@ -81,8 +81,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda Winner X Thể Thao',
-                'brand_id' => $honda?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $conTay->id,
                 'price' => 46000000,
                 'sale_price' => 41000000,
                 'stock' => 25,
@@ -94,8 +94,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda Future 125 Fi',
-                'brand_id' => $honda?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $xeSo->id,
                 'price' => 31500000,
                 'sale_price' => 31000000,
                 'stock' => 10,
@@ -107,8 +107,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Honda Lead 125 Cao Cấp',
-                'brand_id' => $honda?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $honda->id,
+                'category_id' => $tayGa->id,
                 'price' => 41500000,
                 'sale_price' => null,
                 'stock' => 18,
@@ -122,8 +122,8 @@ class ProductSeeder extends Seeder
             // ==================== YAMAHA (7 Xe) ====================
             [
                 'name' => 'Yamaha Exciter 155 VVA',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $conTay->id,
                 'price' => 48000000,
                 'sale_price' => 47200000,
                 'stock' => 30,
@@ -135,8 +135,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha Sirius 110',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $xeSo->id,
                 'price' => 19000000,
                 'sale_price' => 18800000,
                 'stock' => 40,
@@ -148,8 +148,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha Grande Blue Core Hybrid',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $tayGa->id,
                 'price' => 46000000,
                 'sale_price' => 45500000,
                 'stock' => 14,
@@ -161,8 +161,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha Janus 125 Tiêu Chuẩn',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $tayGa->id,
                 'price' => 29000000,
                 'sale_price' => null,
                 'stock' => 22,
@@ -174,8 +174,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha NVX 155 VVA Thế Hệ Mới',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $tayGa->id,
                 'price' => 55000000,
                 'sale_price' => 54500000,
                 'stock' => 11,
@@ -187,8 +187,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha Jupiter Finn',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $xeSo->id,
                 'price' => 28000000,
                 'sale_price' => null,
                 'stock' => 15,
@@ -200,8 +200,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Yamaha YZF-R15 V4',
-                'brand_id' => $yamaha?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $yamaha->id,
+                'category_id' => $conTay->id,
                 'price' => 78000000,
                 'sale_price' => 76000000,
                 'stock' => 5,
@@ -215,8 +215,8 @@ class ProductSeeder extends Seeder
             // ==================== SYM (7 Xe) ====================
             [
                 'name' => 'SYM Attila 125 New',
-                'brand_id' => $sym?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $tayGa->id,
                 'price' => 33500000,
                 'sale_price' => 33000000,
                 'stock' => 10,
@@ -228,8 +228,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Elegant 110',
-                'brand_id' => $sym?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $xeSo->id,
                 'price' => 17000000,
                 'sale_price' => null,
                 'stock' => 35,
@@ -241,8 +241,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Star SR 125 EFI',
-                'brand_id' => $sym?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $xeSo->id,
                 'price' => 28500000,
                 'sale_price' => 27500000,
                 'stock' => 12,
@@ -254,8 +254,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Galaxy 115',
-                'brand_id' => $sym?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $xeSo->id,
                 'price' => 18000000,
                 'sale_price' => null,
                 'stock' => 20,
@@ -267,8 +267,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Posh 50cc',
-                'brand_id' => $sym?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $tayGa->id,
                 'price' => 24000000,
                 'sale_price' => null,
                 'stock' => 25,
@@ -280,8 +280,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Angela 50cc',
-                'brand_id' => $sym?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $xeSo->id,
                 'price' => 16500000,
                 'sale_price' => 16200000,
                 'stock' => 30,
@@ -293,8 +293,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'SYM Husky Classic 125',
-                'brand_id' => $sym?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $sym->id,
+                'category_id' => $conTay->id,
                 'price' => 34000000,
                 'sale_price' => null,
                 'stock' => 6,
@@ -308,8 +308,8 @@ class ProductSeeder extends Seeder
             // ==================== PIAGGIO (7 Xe) ====================
             [
                 'name' => 'Vespa Primavera 125',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 79000000,
                 'sale_price' => 78000000,
                 'stock' => 10,
@@ -321,8 +321,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Vespa Sprint Justin Bieber Edition',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 115000000,
                 'sale_price' => null,
                 'stock' => 2,
@@ -334,8 +334,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Vespa GTS Super 150',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 115000000,
                 'sale_price' => 112000000,
                 'stock' => 4,
@@ -347,8 +347,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Piaggio Liberty 125 One',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 49000000,
                 'sale_price' => null,
                 'stock' => 16,
@@ -360,8 +360,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Piaggio Medley S 150 ABS',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 95000000,
                 'sale_price' => 94000000,
                 'stock' => 5,
@@ -373,8 +373,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Vespa LX 125 Classic',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 68000000,
                 'sale_price' => null,
                 'stock' => 7,
@@ -386,8 +386,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Vespa Sei Giorni II 300cc',
-                'brand_id' => $piaggio?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $piaggio->id,
+                'category_id' => $tayGa->id,
                 'price' => 139000000,
                 'sale_price' => 137000000,
                 'stock' => 2,
@@ -401,8 +401,8 @@ class ProductSeeder extends Seeder
             // ==================== SUZUKI (7 Xe) ====================
             [
                 'name' => 'Suzuki Raider R150 Fi',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $conTay->id,
                 'price' => 51000000,
                 'sale_price' => 49900000,
                 'stock' => 20,
@@ -414,8 +414,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki Satria F150 Nhập Khẩu',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $conTay->id,
                 'price' => 53500000,
                 'sale_price' => null,
                 'stock' => 15,
@@ -427,8 +427,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki Burgman Street 125',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $tayGa?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $tayGa->id,
                 'price' => 48600000,
                 'sale_price' => 48000000,
                 'stock' => 12,
@@ -440,8 +440,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki GSX-R150 Thể Thao',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $conTay->id,
                 'price' => 72000000,
                 'sale_price' => 69000000,
                 'stock' => 5,
@@ -453,8 +453,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki GSX-S150 Naked',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $conTay->id,
                 'price' => 64000000,
                 'sale_price' => null,
                 'stock' => 6,
@@ -466,8 +466,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki Viva 115 Fi',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $xeSo?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $xeSo->id,
                 'price' => 22000000,
                 'sale_price' => null,
                 'stock' => 14,
@@ -479,8 +479,8 @@ class ProductSeeder extends Seeder
             ],
             [
                 'name' => 'Suzuki GZ150-A Cruiser',
-                'brand_id' => $suzuki?->id,
-                'category_id' => $conTay?->id,
+                'brand_id' => $suzuki->id,
+                'category_id' => $conTay->id,
                 'price' => 40500000,
                 'sale_price' => null,
                 'stock' => 8,
@@ -492,11 +492,27 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        // ── Thêm dữ liệu vào database và cấu hình slug/ảnh đại diện ──
+        // ── Thêm dữ liệu vào database và AUTO tìm kiếm ảnh thật bằng LoremFlickr ──
         foreach ($products as $p) {
             $p['slug'] = Str::slug($p['name']) . '-' . time();
             $p['is_active'] = true;
-            $p['image'] = null; // Sẽ hiển thị ảnh Placeholder tự động ngoài view nếu rỗng
+            
+            // Tách chuỗi tên xe lấy từ thứ 2 để làm từ khóa tìm kiếm chính xác
+            // Ví dụ: "Honda Vision 110" -> Từ khóa tìm kiếm: "Vision"
+            // Ví dụ: "Vespa Primavera 125" -> Từ khóa tìm kiếm: "Primavera"
+            $nameParts = explode(' ', $p['name']);
+            $modelKeyword = count($nameParts) > 1 ? $nameParts[1] : 'scooter';
+            
+            // Xác định loại xe đi kèm (motorcycle, scooter hoặc sportbike) để ép bộ lọc ảnh thật chuẩn nhất
+            $typeKeyword = 'motorcycle';
+            if ($p['category_id'] == $tayGa->id) {
+                $typeKeyword = 'scooter';
+            } elseif ($p['category_id'] == $conTay->id) {
+                $typeKeyword = 'sportbike';
+            }
+            
+            // Gán link API động từ LoremFlickr hoạt động 100% cực kỳ ổn định
+            $p['image'] = "https://loremflickr.com/600/450/{$typeKeyword}," . strtolower($modelKeyword);
             
             Product::create($p);
         }
