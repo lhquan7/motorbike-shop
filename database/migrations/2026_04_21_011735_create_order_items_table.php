@@ -8,19 +8,21 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Tạo bảng order_items chứa chi tiết mỗi sản phẩm trong đơn hàng.
      */
     public function up(): void
-{
-    Schema::create('order_items', function (Blueprint $table) {
-        $table->id();
-        // Cách viết này giúp tự động khớp kiểu dữ liệu với bảng orders
-        $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-        $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-        $table->integer('quantity');
-        $table->decimal('price', 10, 2);
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
+            // Mối quan hệ đến đơn hàng và sản phẩm.
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->integer('quantity');
+            $table->decimal('price', 10, 2);
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

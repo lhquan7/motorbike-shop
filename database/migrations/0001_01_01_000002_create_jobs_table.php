@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Tạo các bảng queue để quản lý công việc bất đồng bộ (jobs) và ghi nhận lỗi.
      */
     public function up(): void
     {

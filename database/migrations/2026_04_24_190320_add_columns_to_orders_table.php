@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void {
         Schema::table('orders', function (Blueprint $table) {
+            // Thêm các cột chi tiết thông tin đơn hàng nếu chưa tồn tại.
             if (!Schema::hasColumn('orders', 'payment_method')) {
                 $table->enum('payment_method', ['cod','bank_transfer','vnpay','momo'])
                       ->default('cod')->after('total_amount');

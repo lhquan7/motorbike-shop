@@ -8,9 +8,12 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Tạo các bảng cơ bản của hệ thống: users, password_reset_tokens, sessions.
      */
     public function up(): void
     {
+        // Bảng người dùng chính cho hệ thống.
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -21,12 +24,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Bảng lưu token xác thực mật khẩu (reset password).
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Bảng session nếu dùng driver session cơ sở dữ liệu.
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -39,6 +44,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
+     *
+     * Xoá toàn bộ bảng đã tạo khi rollback.
      */
     public function down(): void
     {

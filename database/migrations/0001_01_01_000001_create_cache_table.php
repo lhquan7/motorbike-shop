@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Tạo bảng cache và cache_locks để hỗ trợ lưu trữ tạm thời và khoá ky thực hiện.
      */
     public function up(): void
     {

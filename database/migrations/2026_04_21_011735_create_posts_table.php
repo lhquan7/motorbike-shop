@@ -8,19 +8,22 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * Tạo bảng posts để lưu bài viết/blog trong hệ thống.
      */
-    public function up(): void {
-    Schema::create('posts', function (Blueprint $table) {
-        $table->id();
-        $table->string('title');
-        $table->string('slug')->unique();
-        $table->text('content');
-        $table->string('thumbnail')->nullable();
-        $table->boolean('is_published')->default(false);
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('content');
+            $table->string('thumbnail')->nullable();
+            $table->boolean('is_published')->default(false);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
