@@ -9,6 +9,7 @@ class VNPayService
     private string $returnUrl;
 
     public function __construct() {
+        // Lấy cấu hình VNPay từ config để tách thông tin nhạy cảm ra ngoài code.
         $this->tmnCode   = config('services.vnpay.tmn_code');
         $this->hashSecret= config('services.vnpay.hash_secret');
         $this->url       = config('services.vnpay.url');
@@ -17,11 +18,12 @@ class VNPayService
 
     public function createPaymentUrl(string $orderCode, int $amount, string $orderInfo): string
     {
+        // Tạo tham số request gửi sang VNPay, bao gồm mã đơn, số tiền và URL callback.
         $vnpParams = [
             'vnp_Version'    => '2.1.0',
             'vnp_Command'    => 'pay',
             'vnp_TmnCode'    => $this->tmnCode,
-            'vnp_Amount'     => $amount * 100,   // VNPay tính đơn vị VNĐ * 100
+            'vnp_Amount'     => $amount * 100,   // VNPay yêu cầu đơn vị là xu, nên nhân 100.
             'vnp_CurrCode'   => 'VND',
             'vnp_TxnRef'     => $orderCode.'_'.time(),
             'vnp_OrderInfo'  => $orderInfo,
@@ -33,6 +35,7 @@ class VNPayService
             'vnp_ExpireDate' => now()->addMinutes(15)->format('YmdHis'),
         ];
 
+        // Sắp xếp tham số và tính chữ ký HMAC theo yêu cầu VNPay.
         ksort($vnpParams);
         $query     = http_build_query($vnpParams);
         $hmac      = hash_hmac('sha512', $query, $this->hashSecret);
@@ -41,6 +44,7 @@ class VNPayService
 
     public function verifyReturn(array $data): bool
     {
+        // Xác thực dữ liệu trả về từ VNPay để bảo mật callback.
         $secureHash = $data['vnp_SecureHash'] ?? '';
         unset($data['vnp_SecureHash'], $data['vnp_SecureHashType']);
         ksort($data);

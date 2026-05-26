@@ -12,6 +12,7 @@ class MoMoService
     private string $notifyUrl;
 
     public function __construct() {
+        // Lấy cấu hình MoMo từ services.php để không hardcode thông tin nhạy cảm.
         $this->partnerCode = config('services.momo.partner_code');
         $this->accessKey   = config('services.momo.access_key');
         $this->secretKey   = config('services.momo.secret_key');
@@ -27,6 +28,7 @@ class MoMoService
         $redirectUrl = $this->returnUrl;
         $ipnUrl      = $this->notifyUrl;
 
+        // Xây dựng chuỗi rawHash theo đúng định dạng của MoMo để tạo chữ ký HMAC.
         $rawHash = "accessKey={$this->accessKey}"
                  . "&amount={$amount}"
                  . "&extraData={$extraData}"
@@ -40,6 +42,7 @@ class MoMoService
 
         $signature = hash_hmac('sha256', $rawHash, $this->secretKey);
 
+        // Tạo payload gửi lên API MoMo.
         $body = [
             'partnerCode' => $this->partnerCode,
             'partnerName' => 'MotoShop',
@@ -66,6 +69,7 @@ class MoMoService
 
     public function verifyReturn(array $data): bool
     {
+        // Xây dựng chuỗi rawHash từ dữ liệu MoMo trả về và đối chiếu chữ ký.
         $rawHash = "accessKey={$this->accessKey}"
                  . "&amount={$data['amount']}"
                  . "&extraData={$data['extraData']}"
