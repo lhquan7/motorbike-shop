@@ -9,6 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
+    // Các cột có thể gán hàng loạt từ input hoặc create() / update().
     protected $fillable = [
         'order_code',
         'user_id',
@@ -23,11 +24,13 @@ class Order extends Model
         'note'
     ];
 
+    // Quan hệ một-đến-nhiều với OrderItem: một đơn hàng có nhiều sản phẩm.
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
+    // Quan hệ với User: nếu khách hàng đã đăng nhập, đơn hàng gắn với user đó.
     public function user()
     {
         return $this->belongsTo(User::class);
