@@ -41,6 +41,24 @@
             border-radius: 12px; 
             border: none; 
         }
+
+        /* ===== BẢO HIỂM FIX LỖI ICON PHÂN TRANG TO KHỔNG LỒ ===== */
+        nav[role="navigation"] svg,
+        .pagination svg {
+            width: 16px !important;
+            height: 16px !important;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        nav[role="navigation"] .flex,
+        .pagination .flex {
+            display: inline-flex;
+            align-items: center;
+        }
+        nav[role="navigation"] p,
+        .pagination p {
+            margin-bottom: 0 !important;
+        }
     </style>
     @stack('styles')
 </head>
